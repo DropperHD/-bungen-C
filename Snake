@@ -1,0 +1,155 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int feld[8][8] = {1, 0};
+int posX = 0, posY = 0, l = 1;
+int davorX[20] = {0};
+int davorY[20] = {0};
+int lang = 1;
+
+void xnull();
+void xsieben();
+void ynull();
+void ysieben();
+int check();
+void yplus();
+void xplus();
+void xminus();
+void yminus();
+void letzeweg();
+
+void nachruckenS();
+
+void nachruckenW();
+
+void nachruckenA();
+
+void nachruckenD();
+
+void Apfel();
+
+void printField() {
+    printf("\n");
+    for (int n = 0; n < 8; n++) {
+        for (int i = 0; i < 8; i++) {
+            printf("%d ", feld[i][n]);
+        }
+        printf("\n");
+    }
+}
+
+void move(char zug) {
+    scanf("%c", &zug);
+    if (zug == 's') { nachruckenS(); }
+    if (zug == 'w') { nachruckenW(); }
+    if (zug == 'd') { nachruckenD(); }
+    if (zug == 'a') { nachruckenA(); }
+
+
+}
+
+int main() {
+    davorY[0] = posY;
+    davorX[0] = posX;
+    char zug;
+    Apfel();
+    printField();
+    while (l == 1) {
+        move(zug);
+        Apfel();
+        printField();
+    }
+
+}
+
+
+void nachruckenD() {
+
+    letzeweg();
+    check(posX,posY,7,0,3);
+}
+
+void nachruckenA() {
+
+    letzeweg();
+    check(posX,posY,0,7,4);
+}
+
+void nachruckenS() {
+
+    letzeweg();
+    check(posY,posX,7,0,2);
+}
+
+void nachruckenW() {
+
+    letzeweg();
+    check(posY,posX,0,7,1);
+}
+
+void Apfel() {
+    // feld[2][0] = 2;
+    int zahl = 0;
+    for (int n = 0; n < 8; n++) {
+        for (int i = 0; i < 8; i++) {
+            zahl = zahl + feld[i][n];
+        }
+    }
+    if (zahl <= lang) {
+        int bool = 1;
+        while (bool == 1) {
+            int x = rand() % 9, y = rand() % 9; //feld[rand() % 9][rand() % 9];
+            if (feld[x][y] == 0) {
+                feld[x][y] = 2;
+                bool = 0;
+            }
+        }
+        lang++;
+    }
+}
+
+void letzeweg() {
+    for (int i = lang; i > 0; i--) {
+        davorX[i] = davorX[i - 1];
+        davorY[i] = davorY[i - 1];
+    }
+    davorY[0] = posY;
+    davorX[0] = posX;
+    feld[davorX[lang - 1]][davorY[lang - 1]] = 0;
+}
+int check(int pos1,int pos2,int zahl1,int zahl2,int plusminus){
+if (pos1 == zahl1) {
+feld[pos2][zahl2] = 1;
+    pos1 = zahl2;
+    switch (plusminus) {
+        case 1:
+            xnull();
+            break;
+        case 2:
+            xsieben();
+            break;
+        case 3:
+            ynull();
+            break;
+        case 4:
+            ysieben();
+            break;
+    }
+} else
+switch (plusminus) {
+    case 1: yminus();break;
+    case 2: yplus();break;
+    case 3: xplus();break;
+    case 4: xminus();break;
+}
+}
+
+void yplus(){feld[posX][posY + 1] = 1;posY++;}
+void xplus(){feld[posX + 1][posY] = 1;posX++;}
+void xminus(){feld[posX - 1][posY] = 1;posX--;}
+void yminus(){feld[posX][posY - 1] = 1;posY--;}
+void xnull(){posX = 0;}
+void xsieben(){posX = 7;}
+void ynull(){posY = 0;}
+void ysieben(){posY = 7;}
