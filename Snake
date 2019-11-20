@@ -12,12 +12,12 @@ void xnull();
 void xsieben();
 void ynull();
 void ysieben();
-int check();
+int check(int pos1,int pos2,int zahl1,int zahl2,int plusminus);
 void yplus();
 void xplus();
 void xminus();
 void yminus();
-void letzeweg();
+void letzeweg(char n);
 
 void nachruckenS();
 
@@ -60,31 +60,31 @@ int main() {
         Apfel();
         printField();
     }
-
+    printf("Spast");
 }
 
 
 void nachruckenD() {
 
-    letzeweg();
+    letzeweg('d');
     check(posX,posY,7,0,3);
 }
 
 void nachruckenA() {
 
-    letzeweg();
-    check(posX,posY,0,7,4);
+    letzeweg('a');
+    check(0,7,posX,posY,4);
 }
 
 void nachruckenS() {
 
-    letzeweg();
-    check(posY,posX,7,0,2);
+    letzeweg('s');
+    check(7,0,posY,posX,2);
 }
 
 void nachruckenW() {
 
-    letzeweg();
+    letzeweg('w');
     check(posY,posX,0,7,1);
 }
 
@@ -109,31 +109,37 @@ void Apfel() {
     }
 }
 
-void letzeweg() {
+void letzeweg(char n) {
     for (int i = lang; i > 0; i--) {
         davorX[i] = davorX[i - 1];
         davorY[i] = davorY[i - 1];
     }
     davorY[0] = posY;
     davorX[0] = posX;
+    /*switch(n){
+        case('s'): if(feld[davorX[lang - 1]][davorY[lang - 1]] == feld[posX][posY + 1]){l = 0;}
+        case('w'): if(feld[davorX[lang - 1]][davorY[lang - 1]] == feld[posX][posY - 1]){l = 0;}
+        case('a'): if(feld[davorX[lang - 1]][davorY[lang - 1]] == feld[posX + 1][posY]){l = 0;}
+        case('d'): if(feld[davorX[lang - 1]][davorY[lang - 1]] == feld[posX -1 ][posY]){l = 0;}
+    }*/
     feld[davorX[lang - 1]][davorY[lang - 1]] = 0;
 }
 int check(int pos1,int pos2,int zahl1,int zahl2,int plusminus){
 if (pos1 == zahl1) {
 feld[pos2][zahl2] = 1;
-    pos1 = zahl2;
+    //pos1 = zahl2;
     switch (plusminus) {
         case 1:
-            xnull();
+            ysieben();
             break;
         case 2:
-            xsieben();
-            break;
-        case 3:
             ynull();
             break;
+        case 3:
+            xnull();
+            break;
         case 4:
-            ysieben();
+            xsieben();
             break;
     }
 } else
@@ -145,10 +151,10 @@ switch (plusminus) {
 }
 }
 
-void yplus(){feld[posX][posY + 1] = 1;posY++;}
-void xplus(){feld[posX + 1][posY] = 1;posX++;}
-void xminus(){feld[posX - 1][posY] = 1;posX--;}
-void yminus(){feld[posX][posY - 1] = 1;posY--;}
+void yplus(){if(feld[posX][posY + 1] == 1){l=0;}feld[posX][posY + 1] = 1;posY++;}
+void xplus(){if(feld[posX + 1][posY] == 1){l=0;}feld[posX + 1][posY] = 1;posX++;}
+void xminus(){if(feld[posX - 1][posY] == 1){l=0;}feld[posX - 1][posY] = 1;posX--;}
+void yminus(){if(feld[posX][posY - 1] == 1){l=0;}feld[posX][posY - 1] = 1;posY--;}
 void xnull(){posX = 0;}
 void xsieben(){posX = 7;}
 void ynull(){posY = 0;}
