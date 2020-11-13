@@ -1,0 +1,111 @@
+// Compiled with: gcc -std=c11 -Wall -pthread -lm
+#include <stdio.h>
+#include <stdlib.h>
+
+void merge(int *array, int from, int to) {
+    if (from >= to) {
+        return;
+    }
+    int m = (to + from) / 2;
+    merge(array, from, m);
+    merge(array, m + 1, to);
+
+    int *temp = malloc((to-from)*sizeof(int));
+    int i = from, j = m + 1, k = 0;
+
+    while (i <= m && j <= to) {
+        if (array[i] <= array[j])
+            temp[k++] = array[i++];
+        else
+            temp[k++] = array[j++];
+    }
+    while (i <= m)
+        temp[k++] = array[i++];
+
+    while (j <= to)
+        temp[k++] = array[j++];
+
+    k--;
+    while (k >= 0) {
+        array[from + k] = temp[k];
+        k--;
+    }
+    free(temp);
+}
+
+
+
+int main(int argc, char *argv) {
+    
+    int length1 = 0;
+    printf ("Bitte Länge eingeben");
+    scanf ("%d", &length1);
+    int *array1 = malloc(length1 * sizeof(int));
+    printf ("Bitte geben sie die Werte ein");
+    for(int i = 0; i < length1; i++){
+        scanf ("%d", &array1[i]);
+    }
+    
+    for(int i = 0; i < length1 - 1 ; i++){
+        if(array1[i+1] <= array1[i]){
+            free(array1);
+            exit(0);
+        }
+    }
+    
+    int length2 = 0;
+    printf ("Bitte Länge eingeben");
+    scanf ("%d", &length2);
+    if(length1 == length2){
+        free(array1);
+        exit(0);
+    }
+    int *array2 = malloc(length2 * sizeof(int));
+    printf ("Bitte geben sie die Werte ein");
+    for(int i = 0; i < length2; i++){
+        scanf ("%d", &array2[i]);
+    }
+    
+     for(int i = 0; i < length2 - 1 ; i++){
+        if(array2[i+1] <= array2[i]){
+            free(array1);
+            free(array2);
+            exit(0);
+        }
+    }
+    
+    printf("Array1:\n");
+    
+     for(int i = 0; i < length1; i++){
+                printf("%d\n", array1[i]);
+    }
+    printf("Array2\n");
+     for(int i = 0; i < length2; i++){
+                printf("%d\n", array2[i]);
+    }
+    
+    int length3 = length1 + length2;
+    int *array3 = malloc(length3 * sizeof(int));
+    for(int i = 0; i < length1; i++){
+            array3[i] = array1[i];
+        }
+    for(int i = 0 ; i < length2; i++){
+            array3[length1 + i] = array2[i];
+        }
+    
+    printf("Array3\n");
+    for(int i = 0; i < length3; i++){
+                printf("%d\n", array3[i]);   
+    }
+    
+    merge(array3 ,0 ,length3-1);
+    
+    printf("Array3 sortiert:\n");
+           for(int i = 0; i < length3; i++){
+                printf("%d", array3[i]);   
+           }
+    free(array1);
+    free(array2);
+    free(array3);
+    return 0; 
+}
